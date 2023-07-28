@@ -1,0 +1,80 @@
+## Tasks on the R datatypes
+
+------------------------------------------------------------------------
+
+### Datatypes
+
+**There are 5 datatypes:**
+
+```{r}
+# numeric (decimal, double precision)
+numeric1 <- c(0.5, -0.2)
+numeric1
+# logical (both forms acceptable)
+logical1 <- c(T, FALSE)
+logical1
+# character
+character1 <- c("ABC", "d", "EF", "#$&^*")
+character1
+# integer
+integer1 <- c(0:13)
+integer1
+# complex
+complex1 <- c(1 + 2i, 3 + 10i)
+complex1
+```
+> it can be converted to the specified type
+
+```{r}
+class(numeric1)
+numeric1 <- as.character(numeric1)
+numeric1
+class(numeric1)
+```
+> To get an integer type like **3L**
+
+```{r}
+x <- 3L
+x
+class(x)
+```
+
+### Lists and vectors
+
+#### *Vectors (Only one datatype)*
+
+> If there is more than one datatype in vector, coersion occurs. It may cause \> error or not.
+
+```{r}
+# function c() creates vector
+vector1 <- c(1.2, 1.3, 1.4)
+vector1
+```
+
+> **":"** can be used for **integer** sequence only!
+
+```{r}
+# ":" can be used for integer sequence only! 
+vector2 <- c(1:13)
+vector2
+```
+The other way to create vector (creates empty vector):
+
+```{r}
+vector3 <- vector("character", length = 15)
+vector3
+```
+
+#### *Lists (different datatypes within one list, list is also considered as vector)*
+
+> Lists have elements' indexing from 1 
+
+```{r}
+list1 <- list(1:5, "Ef", "$#", 1.2, 1 + 4i)
+list1
+```
+```{r}
+list1[3]
+```
+
+------------------------------------------------------------------------
