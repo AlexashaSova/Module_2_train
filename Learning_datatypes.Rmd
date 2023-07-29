@@ -23,6 +23,7 @@ integer1
 complex1 <- c(1 + 2i, 3 + 10i)
 complex1
 ```
+
 > it can be converted to the specified type
 
 ```{r}
@@ -31,6 +32,7 @@ numeric1 <- as.character(numeric1)
 numeric1
 class(numeric1)
 ```
+
 > To get an integer type like **3L**
 
 ```{r}
@@ -38,6 +40,8 @@ x <- 3L
 x
 class(x)
 ```
+
+------------------------------------------------------------------------
 
 ### Lists and vectors
 
@@ -58,6 +62,7 @@ vector1
 vector2 <- c(1:13)
 vector2
 ```
+
 The other way to create vector (creates empty vector):
 
 ```{r}
@@ -67,14 +72,67 @@ vector3
 
 #### *Lists (different datatypes within one list, list is also considered as vector)*
 
-> Lists have elements' indexing from 1 
+> Lists have elements' indexing from 1
 
 ```{r}
 list1 <- list(1:5, "Ef", "$#", 1.2, 1 + 4i)
 list1
 ```
+
 ```{r}
 list1[3]
 ```
 
 ------------------------------------------------------------------------
+
+### Matrices (special type of *vector*)
+
+Empty matrix:
+
+```{r}
+matr1 <- matrix(nrow = 4, ncol = 4)
+matr1
+
+#matrix dimensionality
+dim(matr1)
+
+#attributes, dimensionality is first
+attributes(matr1)
+
+```
+Creating filled-in matrix
+
+```{r}
+matr2 <- matrix(-1:14, nrow = 4, ncol = 4)
+matr2
+attributes(matr2)
+```
+
+> Matrix can also be created from vector
+
+```{r}
+values <- -1:14
+dim(values) <- c(4, 4)
+values
+```
+
+Construct matrix by **binding**:
+
+> **Column-binding:**
+
+```{r}
+col1 <- 1:10
+col2 <- 11:20
+col3 <- 21:30
+cbind(col1, col2, col3)
+```
+
+> **Row-binding**
+
+```{r}
+row1 <- 1:10
+row2 <- 11:20
+row3 <- 21:30
+rbind(col1, col2, col3)
+```
+
