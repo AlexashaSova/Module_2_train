@@ -100,6 +100,7 @@ dim(matr1)
 attributes(matr1)
 
 ```
+
 Creating filled-in matrix
 
 ```{r}
@@ -135,4 +136,49 @@ row2 <- 11:20
 row3 <- 21:30
 rbind(col1, col2, col3)
 ```
+
+------------------------------------------------------------------------
+
+### Factors (to represent *categorical* data)
+
+Vector of integers, where each *integer* has a *label* (categorical data).
+
+```{r}
+factor1 <- factor(c('category #1', 'category #2',  'category #1',  'category #3'))
+factor1
+# number of occurencies of each factor
+table(factor1)
+# convert to integer representation (change attribute level)
+unclass(factor1)
+```
+
+> When you want to specify baseline, you can specify the first level
+
+```{r}
+factor2 <- factor(c('category #1', 'category #2',  'category #1',  'category #3'),
+                  levels = c('category #1', 'category #2','category #3'))
+factor2
+```
+
+### Missing values (*NA* and *NaN*)
+
+Determine if objects are **NA**:
+
+```{r}
+# take previously created empty (NA) matrix
+is.na(matr1)
+```
+
+Determine if objects are **NaN**:
+
+```{r}
+# the same matrix
+is.nan(matr1)
+```
+
+> **NA** != **NaN**
+
+
+### Data Frames (tabular data)
+
 
