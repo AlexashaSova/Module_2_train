@@ -1,3 +1,7 @@
+---
+---
+---
+
 ## Tasks on the R datatypes
 
 ------------------------------------------------------------------------
@@ -178,7 +182,325 @@ is.nan(matr1)
 
 > **NA** != **NaN**
 
+### Data Frames (special list to store tabular data)
 
-### Data Frames (tabular data)
+Create Data Frame:
+
+```{r}
+#read.table()
+#read.csv()
+```
 
 
+> Convert Data Frame to matrix:
+
+```{r}
+#data.matrix()
+```
+
+**Another way** to create Data Frame (two columns):
+
+```{r}
+children <- data.frame(name = c("Sarah", "Daniel", "Connor"),
+                       weight = c(5.6, 3.5, 10.4),
+                       height = c(91, 80, 101))
+children
+```
+
+```{r}
+nrow(children)
+```
+
+```{r}
+ncol(children)
+```
+
+------------------------------------------------------------------------
+
+### Giving names to attributes
+
+For all R objects is the same procedure
+
+#### *Vectors' names*
+
+```{r}
+# we have some sequence
+sequence1 <- 1:4
+# we want to assign name to the attributes of sequence
+names(sequence1) <- c("one", "two", "three", "four")
+# show 
+sequence1
+# show labels only
+names(sequence1)
+
+```
+
+#### *Lists' names*
+
+Assigning names to each column separately:
+
+```{r}
+list2 <- list(a = 1:10, b = "Ef", c = "$#", d = 1 + 4i)
+list2
+```
+
+Or to the list sequence:
+
+```{r}
+list3 <- list(col_A = 1:3,
+              col_B = 4:6)
+list3
+```
+
+#### *Matrices' names (row/col names)*
+
+```{r}
+matr2 <- matrix(-1:2, nrow = 2, ncol = 2)
+dimnames(matr2) <- list(c("rowA", "rowB"), c("colA", "colB"))
+matr2
+```
+
+------------------------------------------------------------------------
+
+**Datatypes in R are as follows:**
+
+![](images/datatypes_summary.jpg)
+
+------------------------------------------------------------------------
+
+## Tasks on reading and writing data
+
+There are following methods of reading data in R:
+
+![](images/reading_data_methods.jpg)
+
+There are following methods of writing data in R:
+
+![](images/writing_data_methods.jpg)
+
+------------------------------------------------------------------------
+
+### *read.table* for small datasets
+
+![](images/read.table.jpg) ![](images/read.table2.jpg)
+
+[***read.table*** **documentation**](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/read.table)
+
+```{r}
+data <- read.table("data/test_txt.txt",
+                   header = TRUE)
+data
+```
+
+### *read.table* for large datasets
+
+> **read.table** and **read.csv** read files into the RAM of the computer!
+
+![](images/calc_memory.jpg)
+
+-   To optimize the work, once if there are no comments in file (lines starting from **\#**), set it in code **comment.char = ""**.
+
+-   There is one more good optimization practice: setting the columns types:
+
+![](images/read.table3.jpg)
+
+> On the picture above we can see, that called **class** function. It works faster than auto determination.
+
+------------------------------------------------------------------------
+
+### dput() and dump()
+
+![](images/dput_dump.jpg)
+
+#### *dput()*
+
+> dget can be used on single R object!
+
+dput objects
+
+![](images/dupt.jpg) Let's try this on the recently created DF:
+
+```{r}
+DF <- read.table("data/test_txt.txt",
+                   header = TRUE)
+dput(DF, 
+     file = "out/dput_DF.R")
+```
+
+read it
+
+```{r}
+new.DF <- dget("out/dput_DF.R")
+new.DF
+```
+
+and analogically
+
+```{r}
+children1 <- data.frame(name = c("Sarah", "Daniel", "Connor"),
+                       weight = c(5.6, 3.5, 10.4),
+                       height = c(91, 80, 101))
+dput(children1,
+     file = "out/dput_children1.R")
+new.children1 <- dget("out/dput_children1.R")
+new.children1
+```
+
+#### *dump()*
+
+> dump can be used on multiple R objects!
+
+![](images/dump.jpg)
+
+------------------------------------------------------------------------
+
+### Connection interfaces to read data
+
+![](images/connections.jpg)
+
+file connections:
+
+![](images/file_connections.jpg)
+
+> We could open connection if it's nedeed to read **parts** of the file.
+
+![](images/connections2.jpg)
+
+Read lines of the webpage:
+
+![](images/connections3.jpg)
+
+------------------------------------------------------------------------
+
+### Subsetting
+
+Subsetting operators:
+
+![](images/subsetting1.jpg)
+
+Example of numerical and logical index:
+
+![](images/subsetting1_example.jpg)
+
+#### Subsetting lists
+
+```{r}
+list3 <- list(a = 1:10, b = "Efa avfs", 
+              c = "$#%^&6", d = 1 + 4i)
+# taking by index
+list3[2]
+# take by col name
+list3["a"]
+# taking contents of the [2]
+list3[[2]]
+#taking contents of the col
+list3$a
+# the same as previous
+list3[["a"]]
+
+```
+
+Extract *multiple* elements of the list:
+
+```{r}
+# provide it as a vector; get only 1 and 4
+list3[c(1, 4)]
+# get by name
+list3[c("a", "d")]
+```
+
+> The [[]] can be used with *computed* indices!
+
+> The \$ can be used *only* with literal names!
+
+![](images/subsetting_lists.jpg)
+
+Nested elements of the list:
+
+![](images/subsetting_lists2.jpg)
+
+#### Subsetting matrices
+
+```{r}
+matr3 <- matrix(-1:2, nrow = 2, ncol = 2)
+dimnames(matr3) <- list(c("rowA", "rowB"), c("colA", "colB"))
+matr3
+
+# take all elements of row 2
+matr3[2, ]
+# take all elements of col 2
+matr3[, 2]
+# take element by col and row names
+matr3["rowA", "colA"]
+```
+
+> If it is one object returned, it returs not \*\*matrix 1\*1 **but** vector**. This can be turned off by setting** drop = FALSE\*\* in the subsetting string.
+
+![](images/subsetting_matrices.jpg)
+
+> If it is one row or column returned, it returs not **matrix** but **vector**. This can be turned off by setting **drop = FALSE** in the subsetting string as in previous example. **(x[1, , drop = FALSE])**
+
+------------------------------------------------------------------------
+
+#### Partial matching of the names
+
+```{r}
+list4 <- list(a = 1:10, boo = "Efa avfs", 
+              c = "$#%^&6", d = 1 + 4i)
+# look for the column by the name (partial)
+list4$b
+# no such col
+list4[["b"]]
+# look for the part
+list4[["b", exact = FALSE]]
+```
+
+------------------------------------------------------------------------
+
+#### Removing missing values
+
+The basic practice of removing *NA* values is setting a vector of *NA* values.
+
+```{r}
+vector_na <- c(1, 3, NA, 4, 1, NA, NA)
+# logical vector, that defines NA
+na <- is.na(vector_na)
+# without na
+vector_na[!na]
+```
+
+There is other practice: showing non NA elements only:
+
+```{r}
+# taking two vectors
+vector_na <- c(1, 3, NA, 4, 1, NA, NA)
+vector_na2 <- c(1, NaN, NA, -1, 4, 2, NaN)
+#using function of getting no NA
+good_cases <- complete.cases(vector_na, vector_na2)
+vector_na[good_cases]
+print("other:")
+vector_na2[good_cases]
+
+```
+
+> **complete.cases** igrores both *NA* and *NaN*!
+
+**complete.cases** can be also used with *Data Frames*:
+
+![](images/remove_na_df.jpg)
+
+> **complete.cases** removes *all the row* with at least one *NA/NaN*
+
+------------------------------------------------------------------------
+
+### Vectorized operations
+
+The main idea is in making *parallel* to that more *efficient* operations.
+
+> There is no loop needed!
+
+![](images/vectorized1.jpg)
+
+#### Vectorized matrix operations
+
+![](images/vectorized2.jpg)
