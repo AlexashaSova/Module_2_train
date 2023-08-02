@@ -42,7 +42,7 @@ sum(is.na(df[,1]))
 
 ### 17
 
-What is the mean of the Ozon column
+What is the mean of the Ozone column
 
 ```{r}
 df_no_na <- complete.cases(df)
