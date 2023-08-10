@@ -113,6 +113,8 @@ Hardly ever used in data science, because it's hard to predict when does loop st
 
 ![](images/next_return.jpg)
 
+***
+
 ## Functions
 
 Functions are usually created in separate *.R* files.
@@ -120,6 +122,12 @@ Functions are usually created in separate *.R* files.
 > R functions always return the **last** expression calculated. If there is only one expression calculated, we don't need to provide a *return* structure.
 
 > We can specify the default parameter value of the function like this $above = function(x, n = 10)$
+
+Key moments:
+
+-   functions can be passed as argument to other functions
+
+-   functions can be nested 
 
 Some of the created functions in a separate file:
 
@@ -176,4 +184,138 @@ column_mean <- function(y, removeNA = TRUE) {
   means_vector
 }
 ```
+
+### Function arguments
+
+Some of the key moments:
+
+![](images/func_args.jpg)
+
+
+![](images/func_args2.jpg)
+
+
+![](images/func_args3.jpg)
+
+> Function can extend another function's functionality by the **"..."** operator, like here:
+
+![](images/func_args4.jpg)
+
+
+> Also **"..."** agrument can be used when the number of arguments is not known in advance:
+
+![](images/func_args5.jpg)
+![](images/func_args6.jpg)
+
+***
+
+# Scoping rules
+
+Look for the currently installed packages:
+
+```{r}
+search()
+```
+
+All the values have to linked with the values in packages:
+
+![](images/scoping1.jpg)
+
+Scoping rules are used to find the definition of the function.
+
+### Optimization using scoping rules
+
+![](images/scoping2.jpg)
+![](images/scoping3.jpg)
+![](images/scoping4.jpg)
+
+> *optimize* can be used to a *single* variable only!
+
+![](images/scoping5.jpg)
+![](images/scoping5.jpg)
+
+***
+
+# Dates and times
+
+There are following ways to represent dates and times:
+
+![](images/date_time1.jpg)
+
+
+***
+
+### Dates:
+
+```{r}
+date1 <- as.Date("1970-01-02")
+# 1 day from the 1970-01-01
+unclass(date1)
+```
+```{r}
+date2 <- as.Date("2001-12-07")
+date2
+unclass(date2)
+```
+
+***
+
+### Times:
+
+![](images/date_time2.jpg)
+
+```{r}
+time1 <- Sys.time()
+time1
+# it is already in POSIXct format
+unclass(time1)
+# there is no difference between the representation except from the storage type 
+converted_time2 <- as.POSIXlt(time1)
+converted_time2
+
+# get the names of the parts
+#names(unclass(converted_time))
+# we should use POSIXlt
+names(unclass(converted_time2))
+```
+```{r}
+# get the part of the time
+converted_time2$wday
+converted_time2$yday
+converted_time2$isdst
+converted_time2$zone
+converted_time2$gmtoff
+```
+
+***
+
+### Converting date-time objects
+
+> If the dates are stored in the **character string format**, we need to use function **strptime** to convert it to the date format.
+
+```{r}
+# help
+?strptime
+```
+
+
+```{r}
+# create date in char vector
+strdate <- c("December 01, 2000, 00:05", "March 13, 2020, 13:20")
+dates_vector <- strptime(strdate, "%B %d, %Y, %R")
+dates_vector
+class(dates_vector)
+```
+
+We can also make some operations on the dates - times. We have to be accurate with the formats:
+
+![](images/date_time3.jpg)
+
+```{r}
+dates_vector <- as.POSIXlt(dates_vector)
+dates_vector[2] - dates_vector[1]
+```
+![](images/date_time4.jpg)
+
+
 

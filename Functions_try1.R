@@ -8,7 +8,7 @@ above10 <- function(x) {
   # logical vector of elements, that > 10
   use <- x > 10
   # apply this subset to the vector
-  x[use] 
+  x[use]
 }
 
 
@@ -18,7 +18,7 @@ above <- function(x, n = 10) {
   # logical vector of elements, that > n
   use <- x > n
   # apply this subset to the vector
-  x[use] 
+  x[use]
 }
 
 
@@ -26,12 +26,12 @@ above <- function(x, n = 10) {
 column_mean <- function(y) {
   # calc num of cols
   n_col <- ncol(y)
-  # store the means in the vector in the size of the columns num 
+  # store the means in the vector in the size of the columns num
   means_vector <- numeric(n_col)
   # looping through the columns
-  for(i in 1:n_col){
+  for (i in 1:n_col) {
     # columns [,i]
-    means_vector[i] <- mean(y[ ,i])
+    means_vector[i] <- mean(y[, i])
   }
   #last expression would be returned
   means_vector
@@ -42,12 +42,12 @@ column_mean <- function(y) {
 column_mean <- function(y, removeNA = TRUE) {
   # calc num of cols
   n_col <- ncol(y)
-  # store the means in the vector in the size of the columns num 
+  # store the means in the vector in the size of the columns num
   means_vector <- numeric(n_col)
   # looping through the columns
-  for(i in 1:n_col){
+  for (i in 1:n_col) {
     # columns [,i]
-    means_vector[i] <- mean(y[ ,i], na.rm = removeNA)
+    means_vector[i] <- mean(y[, i], na.rm = removeNA)
   }
   #last expression would be returned
   means_vector
