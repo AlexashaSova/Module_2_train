@@ -1,0 +1,67 @@
+# Test-3
+
+```{r}
+data(iris)
+```
+
+```{r}
+library(dplyr)
+virginica <- filter(iris, Species == "virginica")
+mean_virginica <- mean(virginica) 
+```
+```{r}
+virginica <- filter(iris, Species == "virginica")
+mean_virginica <- mean(virginica$Sepal.Length)
+mean_virginica
+```
+
+```{r}
+apply(iris[, 1:4], 2, mean)
+```
+```{r}
+colMeans(iris[, 1:4])
+```
+```{r}
+data("mtcars")
+```
+
+```{r}
+with(mtcars, tapply(mpg, cyl, mean))
+```
+```{r}
+tapply(mtcars$mpg, mtcars$cyl, mean)
+```
+```{r}
+sapply(split(mtcars$mpg, mtcars$cyl), mean)
+```
+
+```{r}
+
+```
+```{r}
+?mtcars
+
+```
+```{r}
+tapply(mtcars$hp, mtcars$cyl, mean)
+```
+```{r}
+split(mtcars, mtcars$cyl)
+```
+```{r}
+library(dplyr)
+cyl_8 <- filter(mtcars, cyl == 8)
+cyl_4 <- filter(mtcars, cyl == 4)
+mean_8 <- mean(cyl_8$hp)
+mean_4 <- mean(cyl_4$hp)
+mean_4
+mean_8
+abs_diff <- abs(mean_4 - mean_8)
+abs_diff
+#sapply(mean_4, "-", mean_8)
+```
+```{r}
+debug(ls)
+ls()
+```
+

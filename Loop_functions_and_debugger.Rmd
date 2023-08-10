@@ -1,0 +1,327 @@
+# Looping on the Command line
+
+Loop-like functions:
+
+![](images/loop_functions.jpg)
+
+------------------------------------------------------------------------
+
+## lapply
+
+**lapply** is needed to apply mentioned in the call function to the provided *list*.
+
+![](images/lapply.jpg) ![](images/lapply2.jpg)
+
+> **lapply** applies to each element of the list
+
+```{r}
+list1 <- list(col_A = 1:3,
+              col_B = 4:6)
+lapply(list1, is.na)
+```
+
+> **lapply** always returns a ***list***
+
+```{r}
+# generating a set of 20 values with the mean value 10
+list2 <- rnorm(20,10)
+list2
+```
+
+Generate set of values from the normal/ random uniform distribution:
+
+```{r}
+list3 <- c(10)
+list3 <- lapply(list3, runif)
+list3
+```
+
+**Passing arguments** to *lapply* is like this:
+
+```{r}
+list3 <- c(10)
+list3 <- lapply(list3, runif, min = -1, max = 1000)
+list3
+```
+
+------------------------------------------------------------------------
+
+### Anonymous functions
+
+Let's create the following list:
+
+```{r}
+list4 <- list(A = matrix(1:4, 2, 2), B = matrix(1:10, 5, 2))
+list4
+```
+
+Creating anonymous method to extract first row of each matrix of the list:
+
+```{r}
+lapply(list4, function(extract_first_row) extract_first_row[1, ])
+```
+
+Or first column:
+
+```{r}
+lapply(list4, function(extract_first_row) extract_first_row[, 1])
+```
+
+> Anonymous functions *can not* be accessed from the other code!
+
+------------------------------------------------------------------------
+
+## sapply
+
+Is a variation of *lapply*.
+
+![](images/sapply.jpg) Let's consider the following:
+
+```{r}
+list5 <- list(col_A = 1:3,
+              col_B = 4:6)
+lapply(list5, mean)
+class(lapply(list5, mean))
+```
+
+With *sapply*:
+
+```{r}
+list6 <- list(col_A = 1:3,
+              col_B = 4:6)
+sapply(list6, mean)
+class(sapply(list6, mean))
+mean(list6)
+```
+
+------------------------------------------------------------------------
+
+## apply
+
+![](images/apply.jpg)
+
+![](images/apply2.jpg)
+
+> The main idea is specifying the **MARGIN** parameter. If **MARGIN = 1** the specified function is applied over **rows**. If **MARGIN = 2** the specified function is applied over **columns**. Setting **MARGIN = 1,2** the specified function is applied over **both rows and columns**.
+
+```{r}
+x <- matrix(rnorm(50), 5, 10) 
+# row sum
+apply(x, 1, sum)
+# cloumn mean
+apply(x, 2, mean)
+# row+col sum
+apply(x, c(1, 2), sum)
+```
+
+Apply examples:
+
+![](images/apply4.jpg)
+
+![](images/apply5.jpg)
+
+------------------------------------------------------------------------
+
+### Shortcut functions optimization
+
+![](images/apply3.jpg)
+
+------------------------------------------------------------------------
+
+## mapply
+
+**mapply** is a parallel variant of apply.
+
+![](images/mapply.jpg) Example:
+
+![](images/mapply2.jpg) ![](images/mapply3.jpg)
+
+![](images/mapply4.jpg)
+
+```{r}
+mapply(rep, 1:4, 4:1)
+
+mapply(rep, times = 1:4, x = 4:1)
+
+mapply(rep, times = 1:4, MoreArgs = list(x = 42))
+
+mapply(function(x, y) seq_len(x) + y,
+       c(a =  1, b = 2, c = 3),  # names from first
+       c(A = 10, B = 0, C = -10))
+
+word <- function(C, k) paste(rep.int(C, k), collapse = "")
+utils::str(mapply(word, LETTERS[1:6], 6:1, SIMPLIFY = FALSE))
+```
+
+------------------------------------------------------------------------
+
+## tapply
+
+![](images/tapply.jpg) \> Numeric vectors have to have the same length
+
+Some *tapply* examples: Simplified: ![](images/tapply2.jpg) Non-simplified: ![](images/tapply3.jpg) ![](images/tapply4.jpg)
+
+## split
+
+![](images/split.jpg)
+
+Example:
+
+> **split** always returns **list** back
+
+![](images/split1.jpg)
+
+Or we can combine *split* and *lapply*:
+
+```{r}
+some_vector <- c(rnorm(6), rnorm(6, 2), runif(6))
+factor <- gl(3, 3)
+lapply(split(some_vector, factor), mean)
+```
+
+### Splitting a Data Frame
+
+```{r}
+head(airquality)
+```
+
+Let's calculate mean of the params within each month:
+
+> we can use **na.rm** parameter to remove missing values before calculation!
+
+The output of the following is a list:
+
+```{r}
+splitted_df <- split(airquality, airquality$Month)
+lapply(splitted_df, 
+       function(means_vector) colMeans(means_vector[, c("Ozone", "Solar.R", "Wind")], na.rm = T))
+```
+
+It would be more convenient if an output was represented in the matrix form. To do this, use *sapply*:
+
+```{r}
+sapply(splitted_df, 
+       function(means_vector) colMeans(means_vector[, c("Ozone", "Solar.R", "Wind")], na.rm = T))
+```
+
+### Splitting on more than one level
+
+Assume we have more than one level within data:
+
+```{r}
+x <- rnorm(10)
+factor1 <- gl(2, 5)
+factor2 <- gl(5, 2)
+factor1
+factor2
+interaction(factor1, factor2)
+```
+
+Creating empty levels with *split* function:
+
+```{r}
+str(split(x, list(factor1, factor2)))
+```
+
+Also we can drop empty levels:
+
+```{r}
+str(split(x, list(factor1, factor2), drop = T))
+```
+
+# Debugger
+
+![](images/debugger1.jpg)
+
+Warning:
+
+```{r}
+log(-1)
+```
+
+> To make function NOT return the last value, we can use *invisible()* function.
+
+```{r}
+printmessage <- function(x){
+  if(x > 0){
+    print("x greater than 0!")
+  } else {
+    print("x is less or equal to 0!")
+  }
+  invisible(x)
+}
+```
+
+```{r}
+printmessage(-1)
+```
+
+```{r}
+printmessage(NA)
+```
+
+```{r}
+printmessage <- function(x){
+  if(is.na(x)){
+    print("x is NA!")
+  } else if(x > 0){
+    print("x greater than 0!")
+  } else {
+    print("x is less or equal to 0!")
+  }
+  invisible(x)
+}
+```
+
+## Debugging tools
+
+![](images/debugger2.jpg)
+
+Traceback:
+
+> **traceback** shows *most recent* error and sequence of called fucntions to the function that caused error!
+
+```{r}
+mean(x)
+traceback()
+```
+
+```{r}
+lm(y ~ x)
+```
+
+```{r}
+traceback()
+```
+
+```{r}
+traceback(printmessage(NA))
+```
+
+Debug:
+
+```{r}
+debug(printmessage)
+```
+
+```{r}
+debug(lm)
+lm(y ~ x)
+```
+
+Browser (when needed to stop in the middle):
+
+```{r}
+browser(printmessage(10))
+```
+
+Recover:
+
+> **recover** is a global option that works within the current connection.
+
+![](images/recover.jpg)
+
+```{r}
+options(error = recover)
+read.csv("data/test.txt")
+```

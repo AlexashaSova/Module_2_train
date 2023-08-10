@@ -1,0 +1,173 @@
+# Programming assignment 1
+
+## Preparation
+
+First, we need to unzip file to the directory:
+
+```{r}
+path_to_zip <- "data/rprog_data_specdata.zip"
+exctracted_path <- "data/"
+```
+
+```{r}
+unzip(path_to_zip, exdir = exctracted_path)
+```
+
+## Task 1
+
+![](images/function_1.jpg)
+```{r}
+pollutantmean <- function(directory, pollutant, id = 1:332){
+      if(length(directory) == 1){
+          if(pollutant == "sulfate" || pollutant == "nitrate"){
+                pollutant_values <- numeric()
+                for(file in id){
+                    file_path <- paste(getwd(), "/", directory, "/", sprintf("%03d", file), ".csv", sep = "")
+                    # read data on the path
+                    obtained_data <- read.csv(file_path)
+                    # read data on the pollutant
+                    data_on_pollutant <- obtained_data[[pollutant]]
+                    # all the data about pollutant write to the vector
+                    pollutant_values <- c(pollutant_values, 
+                                         data_on_pollutant[!is.na(data_on_pollutant)])
+                }
+                # mean on all the values
+                mean(pollutant_values)  
+          } else { 
+                paste("No entered pollution type", pollutant)}
+      } else {
+          paste("Entered directory ", directory, "does not exist!")
+      }
+}
+
+```
+
+```{r}
+source("pollutantmean.R")
+pollutantmean("data/specdata", "nitrate", 23)
+```
+
+## Task 2
+
+![](images/function_2.jpg)
+
+```{r}
+complete <- function(directory, id = 1:332){
+  resulting_out <- data.frame(id = numeric(0), 
+                              nobs = numeric(0))
+  if(length(directory) == 1){
+    for (file in id){
+      file_path <- paste(getwd(), "/", directory, "/", sprintf("%03d", file), ".csv", sep = "")
+      # read data on the path
+      obtained_data <- read.csv(file_path)
+      # we have to count needed columns separately
+      df_no_na <- obtained_data[(!is.na(obtained_data$sulfate)), ]
+      df_no_na <- df_no_na[(!is.na(obtained_data$nitrate)), ]
+      nobs <- nrow(df_no_na)
+      resulting_out <- rbind(resulting_out, data.frame(id = file, nobs = nobs))
+    }  
+  } else {
+    paste("Entered directory ", directory, "does not exist!")
+  }
+  resulting_out
+}
+
+```
+
+
+```{r}
+source("complete.R")
+complete("data/specdata", 1)
+
+```
+```{r}
+complete("data/specdata", c(2, 4, 8, 10, 12))
+```
+```{r}
+complete("data/specdata", 30:25)
+```
+
+## Task 3
+
+![](images/function_3.jpg)
+```{r}
+install.packages("dplyr")
+```
+
+
+```{r}
+?cor
+```
+
+
+```{r}
+source("complete.R")
+source("corr.R")
+cr <- corr("data/specdata", 150)
+head(cr)
+```
+```{r}
+source("pollutantmean.R")
+pollutantmean("data/specdata", "sulfate", 1:10)
+```
+
+```{r}
+source("pollutantmean.R")
+pollutantmean("data/specdata", "nitrate", 70:72)
+```
+```{r}
+source("pollutantmean.R")
+pollutantmean("data/specdata", "sulfate", 34)
+```
+
+```{r}
+source("pollutantmean.R")
+pollutantmean("data/specdata", "nitrate")
+```
+
+```{r}
+source("complete.R")
+cc <- complete("data/specdata", c(6, 10, 20, 34, 100, 200, 310))
+print(cc$nobs)
+```
+```{r}
+source("complete.R")
+cc <- complete("data/specdata", 54)
+print(cc$nobs)
+```
+```{r}
+RNGversion("3.5.1")
+set.seed(42)
+source("complete.R")
+cc <- complete("data/specdata", 332:1)
+use <- sample(332, 10)
+print(cc[use, "nobs"])
+```
+```{r}
+source("complete.R")
+source("corr.R")
+cr <- corr("data/specdata")
+cr <- sort(cr)
+RNGversion("3.5.1")
+set.seed(868)
+out <- round(cr[sample(length(cr), 5)], 4)
+print(out)
+```
+```{r}
+source("complete.R")
+source("corr.R")
+cr <- corr("data/specdata", 129)                
+cr <- sort(cr)                
+n <- length(cr)                
+set.seed(197)                
+out <- c(n, round(cr[sample(n, 5)], 4))
+print(out)
+```
+```{r}
+cr <- corr("data/specdata", 2000)
+n <- length(cr)
+cr <- corr("data/specdata", 1000)
+cr <- sort(cr)
+print(c(n, round(cr, 4)))
+```
+
